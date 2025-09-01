@@ -1,12 +1,18 @@
 package main
 
+/*
+	Код взят и 3-ей задачи и будет модифицирован согласно условию задачи №4.
+*/
+
 import (
 	"context"
 	"flag"
 	"fmt"
 	"math/rand"
+	"os/signal"
 	"strconv"
 	"sync"
+	"syscall"
 	"time"
 )
 
@@ -18,8 +24,8 @@ func main() {
 	}
 	myChannel := make(chan string) // Создаем небуферизрованный канал для "общения" горутин
 	wg := sync.WaitGroup{}
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30) // Создаем тестовый контекст для автозавершения
-	defer cancel()
+	ctxSigInt, cacnelSigInt := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer cacnelSigInt()
 
 	messageCount := 0 // Переменная с номером отправляемого сообщения
 
@@ -29,25 +35,27 @@ func main() {
 		go func(ctx context.Context, ch chan string, workerId int) {
 			for {
 				select {
-				case <-ctx.Done():
-					wg.Done() // После окончания контекста горутина сама завершается
+				case <-ctxSigInt.Done(): // Если программа завершается через CTRL+C
+					fmt.Print("\nGoroutine was finished by CTRL+C\n")
+					wg.Done() // Завершение работы горутины
 					return
-				case msg, ok := <-ch: // Если канал закрылся раньше, горутины также завершатся
+				case msg, ok := <-myChannel: // Чтение из канала и обработка закрытия канала
 					if !ok {
 						wg.Done()
 						return
 					}
 					fmt.Printf("===GOT MESSAGE FROM CHANNEL BY WORKER %d:%s\n", workerId, msg)
 					time.Sleep(time.Second * 1)
+
 				}
 			}
-		}(ctx, myChannel, i)
+		}(ctxSigInt, myChannel, i)
 	}
 
 	for { // Запись сообщений в канал
 		select {
-		case <-ctx.Done():
-			fmt.Printf("Task3 was succesfully finished\n")
+		case <-ctxSigInt.Done():
+			fmt.Printf("\nTask4 was succesfully finished\n")
 			close(myChannel)
 			return
 		default:
