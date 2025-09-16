@@ -60,4 +60,4 @@
 
 Проверьте работу кода на гонки (util go run -race).
 
-**Запуск решения:** `cd 7 && go build -race . && ./7 && cd ..` | `make task7` | `go run --race`
+**Запуск решения:** `cd 7 && go build -race && ./7 && cd ..` | `make task7`
