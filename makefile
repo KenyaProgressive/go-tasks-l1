@@ -31,6 +31,9 @@ task10:
 task11:
 	cd 11 && go build -o task11.out . && ./task11.out && cd ..
 
+task12:
+	cd 12 && go build -o task12.out . && ./task12.out && cd ..	
+
 
 clean-all:
 	cd 1 && rm -f task1.out && cd ..
@@ -44,3 +47,4 @@ clean-all:
 	cd 9 && rm -f task9.out && cd ..
 	cd 10 && rm -f task10.out && cd ..
 	cd 11 && rm -f task11.out && cd ..
+	cd 12 && rm -f task12.out && cd ..
