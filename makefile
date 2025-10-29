@@ -59,7 +59,10 @@ task20:
 	cd 20 && go build -o task20.out . && ./task20.out && cd ..
 
 task21:
-	cd 21 && go build -o task21.out . && ./task21.out && cd ..	
+	cd 21 && go build -o task21.out . && ./task21.out && cd ..
+
+task22:
+	cd 22 && go build -o task22.out . && ./task22.out && cd ..	
 
 clean-all:
 	cd 1 && rm -f task1.out && cd ..
@@ -83,3 +86,4 @@ clean-all:
 	cd 19 && rm -f task19.out && cd ..
 	cd 20 && rm -f task20.out && cd ..
 	cd 21 && rm -f task21.out && cd ..
+	cd 22 && rm -f task22.out && cd ..
